@@ -1,0 +1,697 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+      <script src="javascripts/all.js" type="text/javascript"></script>
+
+      <script>
+        $(function() {
+          setupLanguages(["csharp","javascript","lua","python"]);
+        });
+      </script>
+  </head>
+
+  <body class="index">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="csharp">csharp</a>
+              <a href="#" data-language-name="javascript">javascript</a>
+              <a href="#" data-language-name="lua">lua</a>
+              <a href="#" data-language-name="python">python</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='http://forum.rustoxide.com'>Get help on our forums</a></li>
+            <li><a href='https://github.com/OxideMod/Oxide'>View Oxide source on GitHub</a></li>
+            <li><a href='https://github.com/tripit/slate'>Documentation powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id="introduction">Introduction</h1>
+<pre><code class="highlight plaintext">  _          _ _             
+ | |__   ___| | | ___        
+ | '_ \ / _ \ | |/ _ \       
+ | | | |  __/ | | (_) |      
+ |_| |_|\___|_|_|\___/     _ 
+ __      _____  _ __| | __| |
+ \ \ /\ / / _ \| '__| |/ _` |
+  \ V  V / (_) | |  | | (_| |
+   \_/\_/ \___/|_|  |_|\__,_|
+
+So you want to develop plugins for Oxide?
+
+We'll show you how to get started, along with sample code!
+</code></pre>
+
+<p>Oxide is a complete rewrite of the popular, original Oxide mod for the game Rust. Oxide has a focus on modularity and extensibility.</p>
+
+<p>The core is highly abstracted and loosely coupled, and could be used to mod any game that uses .NET such as 7 Days to Die, The Forest, Space Engineers, and more. Support for games, plugin languages, and other functionality is added via extensions. When loading, Oxide 2 scans the binary folder for DLL extensions. Extension filenames are formatted as <code class="prettyprint">Oxide.Ext.Name.dll</code>.</p>
+
+<p>The current official extensions are listed below:</p>
+
+<ul>
+<li>Oxide.Ext.CSharp - <em>Allows raw CSharp plugins to be loaded</em></li>
+<li>Oxide.Ext.JavaScript - <em>Allows JavaScript plugins to be loaded</em></li>
+<li>Oxide.Ext.Lua - <em>Allows Lua plugins to be loaded</em></li>
+<li>Oxide.Ext.Python - <em>Allows Python plugins to be loaded</em></li>
+<li>Oxide.Ext.Rust - <em>Provides support for the Rust Experimental server</em></li>
+<li>Oxide.Ext.Unity - <em>Provides support for Unity games</em></li>
+</ul>
+
+<p>As an example to what kind of extensions may be used in the future, here is a non-exhaustive list of possibilities:</p>
+
+<ul>
+<li>Oxide.Ext.IRC - <em>Allows plugins to access an IRC server</em></li>
+<li>Oxide.Ext.MySQL - <em>Allows plugins to access a MySQL database</em></li>
+<li>Oxide.Ext.SQLite - <em>Allows plugins to access a SQLite database</em></li>
+<li>Oxide.Ext.WebServer - <em>Allows the game server to also host a web server</em></li>
+</ul>
+
+<h1 id="api-hooks">API Hooks</h1>
+
+<h2 id="plugin-specific-hooks">Plugin specific hooks</h2>
+
+<h3 id="init()">Init()</h3>
+
+<ul>
+<li>Called when the plugin is being loaded</li>
+<li>Other plugins may or may not be present, dependant on load order</li>
+<li>Other plugins WILL have been executed though, so globals exposed by them will be present</li>
+</ul>
+
+<h3 id="loaddefaultconfig()">LoadDefaultConfig()</h3>
+
+<ul>
+<li>Called when the config for the plugin should be initialized</li>
+<li>Only called if the config file does not already exist</li>
+</ul>
+
+<h3 id="unload()">Unload()</h3>
+
+<ul>
+<li>Called when the plugin is being unloaded</li>
+</ul>
+
+<h2 id="general-hooks">General hooks</h2>
+
+<h3 id="oninitlogging()">OnInitLogging()</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/Bootstrap.StartupShared</li>
+<li>No return behavior</li>
+<li>Used internally by Oxide to start Unity logging</li>
+</ul>
+
+<h3 id="ontick()">OnTick()</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ServerMgr.DoTick</li>
+<li>No return behavior</li>
+<li>Called every tick (defined by the tickrate of the server?)</li>
+</ul>
+
+<h3 id="modifytags(string-oldtags)">ModifyTags(string oldtags)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ServerMgr.UpdateServerInformation</li>
+<li>Returning a string overrides the tags with new ones</li>
+<li>Used by RustCore and abstracted into BuildServerTags</li>
+</ul>
+
+<h3 id="buildservertags(ilist-tags)">BuildServerTags(IList<string> tags)</h3>
+
+<ul>
+<li>Called from RustCore.ModifyTags</li>
+<li>No return behavior</li>
+<li>Add tags to the list, they will be concat&rsquo;d at the end</li>
+</ul>
+
+<h3 id="onserverinitialized()">OnServerInitialized()</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ServerMgr</li>
+<li>No return behavior</li>
+<li>Is called after the server startup has been completed and is awaiting connections</li>
+</ul>
+
+<h3 id="onruncommand(facepunch/consolesystem.arg-arg)">OnRunCommand(Facepunch/ConsoleSystem.Arg arg)</h3>
+
+<ul>
+<li>Called from Facepunch/ConsoleSystem.Run, Facepunch/ConsoleSystem.RunUnrestricted and Facepunch/ConsoleSystem.ClientRun</li>
+<li>Return true to override Rust&rsquo;s command handling system</li>
+<li>Useful for intercepting commands before they get to their intended target (like chat.say)</li>
+<li>Used by RustCore to implement chat commands</li>
+</ul>
+
+<h3 id="onuserapprove(facepunch/network.connection-connection)">OnUserApprove(Facepunch/Network.Connection connection)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ConnectionAuth.OnNewConnection</li>
+<li>Returning a non-null value overrides default behavior, plugin should call Reject if it does this</li>
+<li>Used by RustCore and abstracted into CanClientLogin</li>
+</ul>
+
+<h3 id="canclientlogin(facepunch/network.connection-connection)">CanClientLogin(Facepunch/Network.Connection connection)</h3>
+
+<ul>
+<li>Called from RustCore.OnUserApprove</li>
+<li>Returning true will allow the connection, returning nothing will by default allow the connection, returning anything else will reject it with an error message</li>
+<li>Returning a string will use the string as the error message</li>
+</ul>
+
+<h3 id="onfindspawnpoint()">OnFindSpawnPoint()</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ServerMgr</li>
+<li>Return a Assembly-CSharp/BasePlayer.SpawnPoint object to use that spawnpoint</li>
+<li>Useful for controlling player spawnpoints (like making all spawns occur in a set area)</li>
+</ul>
+
+<h3 id="onplayerconnected(facepunch/network.message-packet)">OnPlayerConnected(Facepunch/Network.Message packet)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ServerMgr</li>
+<li>No return behavior</li>
+<li>Is called before the player object is created, but after the player has been approved to join the game</li>
+<li>Can get the connection from packet.connection</li>
+</ul>
+
+<h3 id="onplayerspawn(assembly-csharp/baseplayer-player,-facepunch/network.connection-connection)">OnPlayerSpawn(Assembly-CSharp/BasePlayer player, Facepunch/Network.Connection connection)</h3>
+
+<ul>
+<li>Called when the player spawns (specifically when they click the &ldquo;Respawn&rdquo; button)</li>
+<li>No return behavior</li>
+<li>ONLY called when the player is transitioning from dead to not-dead, so not when they&rsquo;re waking up</li>
+<li>This means it&rsquo;s possible for a player to connect and disconnect from a server without OnPlayerSpawn ever triggering for them</li>
+</ul>
+
+<h3 id="onrunplayermetabolism(assembly-csharp/playermetabolism-metabolism)">OnRunPlayerMetabolism(Assembly-CSharp/PlayerMetabolism metabolism)</h3>
+
+<ul>
+<li>Called before a metabolism update occurs for the specified player</li>
+<li>Returning true cancels the update</li>
+<li>Metabolism update consists of managing the player&rsquo;s temperature, health etc</li>
+<li>You can use this to turn off or change certain aspects of the metabolism, either by editing values before returning, or taking complete control of the method</li>
+<li>Access the player object using metabolism:GetComponent(&ldquo;BasePlayer&rdquo;)</li>
+</ul>
+
+<h3 id="onplayerdisconnected(assembly-csharp/baseplayer-player)">OnPlayerDisconnected(Assembly-CSharp/BasePlayer player)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ServerMgr</li>
+<li>No return behavior</li>
+<li>Is called before the player object is created, but after the player has been approved to join the game</li>
+</ul>
+
+<h3 id="onplayerattack(assembly-csharp/baseplayer-attacker,-assembly-csharp/hitinfo-hitinfo)">OnPlayerAttack(Assembly-CSharp/BasePlayer attacker, Assembly-CSharp/HitInfo hitinfo)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/BasePlayer</li>
+<li>Returning true cancels the attack</li>
+<li>Useful for modifying an attack before it goes out</li>
+<li>hitinfo.HitEntity should be the entity that this attack would hit</li>
+</ul>
+
+<h3 id="onitemcraft(assembly-csharp/itemcrafttask-item)">OnItemCraft(Assembly-CSharp/ItemCraftTask item)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ItemCrafter</li>
+<li>Return a Assembly-CSharp/ItemCraftTask object to modify behavior</li>
+<li>Is called right after an item has started crafting</li>
+</ul>
+
+<h3 id="onitemdeployed(assembly-csharp/deployer-deployer,-assembly-csharp/baseentity-deployedentity)">OnItemDeployed(Assembly-CSharp/Deployer deployer, Assembly-CSharp/BaseEntity deployedentity)</h3>
+
+<ul>
+<li>Assembly-CSharp/Deployer</li>
+<li>No return behavior</li>
+<li>Is called right after an item has been deployed</li>
+</ul>
+
+<h3 id="onitemaddedtocontainer(assembly-csharp/itemcontainer-container,-assembly-csharp/item-item)">OnItemAddedToContainer(Assembly-CSharp/ItemContainer container, Assembly-CSharp/Item item)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ItemContainer</li>
+<li>No return behavior</li>
+<li>Is called right after an item was added to a container</li>
+<li>An entire stack has to be created, not just adding more wood to a wood stack for example</li>
+</ul>
+
+<h3 id="onitemremovedfromcontainer(assembly-csharp/itemcontainer-container,-assembly-csharp/item-item)">OnItemRemovedFromContainer(Assembly-CSharp/ItemContainer container, Assembly-CSharp/Item item)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/ItemContainer</li>
+<li>No return behavior</li>
+<li>Is called right after an item was removed from a container</li>
+<li>The entire stack has to be removed for this to be called, not just a little bit</li>
+</ul>
+
+<h3 id="ongather(assembly-csharp/resourcedispenser-dispenser,-assembly-csharp/baseentity-entity,-assembly-csharp/item-item)">OnGather(Assembly-CSharp/ResourceDispenser dispenser, Assembly-CSharp/BaseEntity entity, Assembly-CSharp/Item item)</h3>
+
+<ul>
+<li>Assembly-CSharp/ResourceDispenser</li>
+<li>No return behavior</li>
+<li>Is called before the player is given items from a resource</li>
+</ul>
+
+<h3 id="canopendoor(assembly-csharp/baseplayer-player,-assembly-csharp/baselock-door)">CanOpenDoor(Assembly-CSharp/BasePlayer player, Assembly-CSharp/BaseLock door)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/BaseLock</li>
+<li>Returning true will allow door usage, nothing will by default will allow door usage, returning anything else will reject door usage</li>
+</ul>
+
+<h3 id="canopendoor(assembly-csharp/baseplayer-player,-assembly-csharp/codelock-code)">CanOpenDoor(Assembly-CSharp/BasePlayer player, Assembly-CSharp/CodeLock code)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/CodeLock</li>
+<li>Returning true will allow door code usage, nothing will by default will allow door code usage, returning anything else will reject door code usage</li>
+</ul>
+
+<h3 id="canopendoor(assembly-csharp/baseplayer-player,-assembly-csharp/keylock-key)">CanOpenDoor(Assembly-CSharp/BasePlayer player, Assembly-CSharp/KeyLock key)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/KeyLock</li>
+<li>Returning true will allow door key usage, nothing will by default will allow door key usage, returning anything else will reject door key usage</li>
+</ul>
+
+<h3 id="onentityattacked(unityengine/monobehavior-entity,-assembly-csharp/hitinfo-hitinfo)">OnEntityAttacked(UnityEngine/Monobehavior entity, Assembly-CSharp/HitInfo hitinfo)</h3>
+
+<ul>
+<li>Called from multiple places, each entity&rsquo;s attack handler basically</li>
+<li>Returning non-null value overrides default server behavior (useful for godmode etc)</li>
+<li>Alternatively, modify the hitinfo object to change the damage</li>
+<li>It should be ok to set the damage to 0, but if you don&rsquo;t return non-null, the player&rsquo;s client will receive a damage indicator (if entity is a BasePlayer)</li>
+<li>hitinfo has all kinds of useful things in it, such as hitinfo.Weapon, hitinfo.damageAmount or hitinfo.damageType</li>
+<li>Currently implemented for: BasePlayer, BaseAnimal</li>
+</ul>
+
+<h3 id="onentitybuilt(assembly-csharp/baseplayer-player,-unityengine/gameobject-gameobject)">OnEntityBuilt(Assembly-CSharp/BasePlayer player, UnityEngine/GameObject gameobject)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/Item.Modules.Planner</li>
+<li>No return behavior</li>
+<li>Called when any structure is built (walls, ceilings, stairs, etc)</li>
+</ul>
+
+<h3 id="onentitydeath(unityengine/monobehavior-entity,-assembly-csharp/hitinfo-hitinfo)">OnEntityDeath(UnityEngine/Monobehavior entity, Assembly-CSharp/HitInfo hitinfo)</h3>
+
+<ul>
+<li>Called from multiple places, each entity&rsquo;s death handler basically</li>
+<li>No return behavior</li>
+<li>hitinfo might be null, check it before use</li>
+<li>Editing hitinfo probably has no effect</li>
+<li>Currently implemented for: BasePlayer, BaseAnimal</li>
+</ul>
+
+<h3 id="onentityenter(assembly-csharp/triggerbase-triggerbase,-assembly-csharp/baseentity-entity)">OnEntityEnter(Assembly-CSharp/TriggerBase triggerbase, Assembly-CSharp/BaseEntity entity)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/TriggerBase</li>
+<li>No return behavior</li>
+<li>Called when an entity enters an area/zone (building privilege zone, water area, radiation zone, hurt zone, etc)</li>
+</ul>
+
+<h3 id="onentityleave(assembly-csharp/triggerbase-triggerbase,-assembly-csharp/baseentity-entity)">OnEntityLeave(Assembly-CSharp/TriggerBase triggerbase, Assembly-CSharp/BaseEntity entity)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/TriggerBase</li>
+<li>No return behavior</li>
+<li>Called when an entity leaves an area/zone (building privilege zone, water area, radiation zone, hurt zone, etc)</li>
+</ul>
+
+<h3 id="onentityspawn(unityengine/monobehavior-entity)">OnEntitySpawn(UnityEngine/Monobehavior entity)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/BaseNetworkable</li>
+<li>No return behavior</li>
+<li>Called when any networked entity is spawned (including trees)</li>
+</ul>
+
+<h3 id="onplayerinit(assembly-csharp/baseplayer-player)">OnPlayerInit(Assembly-CSharp/BasePlayer player)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/BasePlayer</li>
+<li>No return behavior</li>
+<li>Called when the player is initialising (after they&rsquo;ve connected, before they wake up)</li>
+</ul>
+
+<h3 id="onplayerchat(assembly-csharp/chat.say-arg)">OnPlayerChat(Assembly-CSharp/chat.say arg)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/chat.say</li>
+<li>Returning a non-null value overrides default behavior of chat, not commands</li>
+</ul>
+
+<h3 id="onplayerloot(assembly-csharp/playerloot-lootinventory,-assembly-csharp/baseentity-targetentity)">OnPlayerLoot(Assembly-CSharp/PlayerLoot lootinventory, Assembly-CSharp/BaseEntity targetentity)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/PlayerLoot</li>
+<li>No return behavior</li>
+<li>Called when the player starts looting an entity</li>
+</ul>
+
+<h3 id="onplayerloot(assembly-csharp/playerloot-lootinventory,-assembly-csharp/baseplayer-targetplayer)">OnPlayerLoot(Assembly-CSharp/PlayerLoot lootinventory, Assembly-CSharp/BasePlayer targetplayer)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/PlayerLoot</li>
+<li>No return behavior</li>
+<li>Called when the player starts looting another player</li>
+</ul>
+
+<h3 id="onplayerloot(assembly-csharp/playerloot-lootinventory,-assembly-csharp/item-targetitem)">OnPlayerLoot(Assembly-CSharp/PlayerLoot lootinventory, Assembly-CSharp/Item targetitem)</h3>
+
+<ul>
+<li>Called from Assembly-CSharp/PlayerLoot</li>
+<li>No return behavior</li>
+<li>Called when the player starts looting an item</li>
+</ul>
+
+<h1 id="configurations">Configurations</h1>
+
+<h1 id="data-tables">Data Tables</h1>
+
+<h1 id="timers">Timers</h1>
+
+<h2 id="creating-a-timer">Creating a timer</h2>
+
+<p>Sometimes you come across a situation which only a timer can fix. Timers are great for delaying code, allowing it to be run later.</p>
+
+<h3 id="timer.once">timer.Once</h3>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">self</span><span class="p">.</span><span class="n">broadcastTimer</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">Once</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span>
+    <span class="n">rust</span><span class="p">.</span><span class="n">BroadcastChat</span><span class="p">(</span><span class="s2">"SERVER"</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<p>Executes the specified function once after the specified delay.</p>
+
+<h3 id="timer.repeat">timer.Repeat</h3>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">self</span><span class="p">.</span><span class="n">broadcastTimer</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">Repeat</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span>
+    <span class="n">rust</span><span class="p">.</span><span class="n">BroadcastChat</span><span class="p">(</span><span class="s2">"SERVER"</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<p>Executes the specified function every &ldquo;delay&rdquo; seconds. If &ldquo;repeats&rdquo; is specified, the function will only be called &ldquo;repeats&rdquo; times.</p>
+
+<h3 id="timer.nextframe">timer.NextFrame</h3>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<p>Executes the specified function at the next frame.</p>
+
+<h3 id="timer.chain">timer.Chain</h3>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<p>Executes a chain of delayed functions. Each number in the argument list delays the timer chain by n more seconds, and each function in the argument list gets called after the previous delays in the chain have passed.</p>
+
+<h2 id="destroying-a-timer">Destroying a timer</h2>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="k">function</span> <span class="nf">PLUGIN</span><span class="p">:</span><span class="n">Unload</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">broadcastTimer</span> <span class="k">then</span>
+        <span class="n">broadcastTimer</span><span class="p">:</span><span class="n">Destroy</span><span class="p">()</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<p>It&rsquo;s always a good habit to stop all timers when your plugin is unloaded; do this by destroying the instance of the timer.</p>
+
+<p>Timers can be used anywhere in your plugin, not just in the Unload function. Just make sure to always destroy them, as you wouldn&rsquo;t want a bunch of timers piling up and slowing down someone&rsquo;s server!</p>
+
+<h1 id="web-requests">Web Requests</h1>
+
+<p>Sends a HTTP web request to the specified URL. Returns true if the web request was sent, false if not. The callback is called with 2 parameters - an integer HTTP response code and a string response.</p>
+
+<h2 id="get-method">Get method</h2>
+
+<p>Returns true/false</p>
+
+<h2 id="post-method">Post method</h2>
+
+<p>Returns true/false</p>
+
+<h1 id="styling-messages">Styling Messages</h1>
+
+<blockquote>
+<p>Render the text in boldface</p>
+</blockquote>
+<pre><code class="highlight html">We are <span class="nt">&lt;b&gt;</span>not<span class="nt">&lt;/b&gt;</span> amused.
+</code></pre>
+
+<blockquote>
+<p>Render the text in italics</p>
+</blockquote>
+<pre><code class="highlight html">We are <span class="nt">&lt;i&gt;</span>usually<span class="nt">&lt;/i&gt;</span> not amused.
+</code></pre>
+
+<blockquote>
+<p>It is possible to apply more than one style to a section of text by “nesting” one element inside another.</p>
+</blockquote>
+<pre><code class="highlight html">We are <span class="nt">&lt;b&gt;&lt;i&gt;</span>definitely not<span class="nt">&lt;/i&gt;&lt;/b&gt;</span> amused
+</code></pre>
+
+<blockquote>
+<p>Note the ordering of the ending tags, which is in reverse to that of the starting tags. The reason for this is perhaps clearer when you consider that the inner tags need not span the whole text of the outermost element.</p>
+</blockquote>
+<pre><code class="highlight html">We are <span class="nt">&lt;b&gt;</span>absolutely <span class="nt">&lt;i&gt;</span>definitely<span class="nt">&lt;/i&gt;</span> not<span class="nt">&lt;/b&gt;</span> amused
+</code></pre>
+
+<blockquote>
+<p>Change the size of text, by pixel value</p>
+</blockquote>
+<pre><code class="highlight html">We are <span class="nt">&lt;size</span><span class="err">=</span><span class="na">50</span><span class="nt">&gt;</span>largely<span class="nt">&lt;/size&gt;</span> unaffected.
+</code></pre>
+
+<blockquote>
+<p>Change the color of text</p>
+</blockquote>
+<pre><code class="highlight html"><span class="nt">&lt;color</span><span class="err">=#</span><span class="na">00ffffff</span><span class="nt">&gt;</span>Hello world<span class="nt">&lt;/color&gt;</span>
+</code></pre>
+
+<p>With Rust, you can stylize messages send from the server via plugins. Styling is limited to bold, italic, size, and color.</p>
+
+<p>The color can be specified in the traditional HTML format. <code class="prettyprint">#rrggbbaa</code>&hellip; where the letters correspond to pairs of hexadecimal digits denoting the red, green, blue and alpha (transparency) values for the color.</p>
+
+<p>Another option is to use the name of the color. This is easier to understand but naturally, the range of colors is limited and full opacity is always assumed. <code class="prettyprint">&lt;color=cyan&gt;</code>&hellip; The available color names are given in the table below.</p>
+
+<table><thead>
+<tr>
+<th>Color Name</th>
+<th>Hex Value</th>
+<th>Swatch</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>aqua (same as cyan)</td>
+<td>#00ffffff</td>
+<td><img src="images/cyan-swatch.png" /></td>
+</tr>
+<tr>
+<td>black</td>
+<td>#000000ff</td>
+<td><img src="images/black-swatch.png" /></td>
+</tr>
+<tr>
+<td>blue</td>
+<td>#0000ffff</td>
+<td><img src="images/blue-swatch.png" /></td>
+</tr>
+<tr>
+<td>brown</td>
+<td>#a52a2aff</td>
+<td><img src="images/brown-swatch.png" /></td>
+</tr>
+<tr>
+<td>cyan (same as aqua)</td>
+<td>#00ffffff</td>
+<td><img src="images/cyan-swatch.png" /></td>
+</tr>
+<tr>
+<td>darkblue</td>
+<td>#0000a0ff</td>
+<td><img src="images/darkblue-swatch.png" /></td>
+</tr>
+<tr>
+<td>fuchsia (same as magenta)</td>
+<td>#ff00ffff</td>
+<td><img src="images/magenta-swatch.png" /></td>
+</tr>
+<tr>
+<td>green</td>
+<td>#008000ff</td>
+<td><img src="images/green-swatch.png" /></td>
+</tr>
+<tr>
+<td>grey</td>
+<td>#808080ff</td>
+<td><img src="images/grey-swatch.png" /></td>
+</tr>
+<tr>
+<td>lightblue</td>
+<td>#add8e6ff</td>
+<td><img src="images/lightblue-swatch.png" /></td>
+</tr>
+<tr>
+<td>lime</td>
+<td>#00ff00ff</td>
+<td><img src="images/lime-swatch.png" /></td>
+</tr>
+<tr>
+<td>magenta (same as fuchsia)</td>
+<td>#ff00ffff</td>
+<td><img src="images/magenta-swatch.png" /></td>
+</tr>
+<tr>
+<td>maroon</td>
+<td>#800000ff</td>
+<td><img src="images/maroon-swatch.png" /></td>
+</tr>
+<tr>
+<td>navy</td>
+<td>#000080ff</td>
+<td><img src="images/navy-swatch.png" /></td>
+</tr>
+<tr>
+<td>olive</td>
+<td>#808000ff</td>
+<td><img src="images/olive-swatch.png" /></td>
+</tr>
+<tr>
+<td>orange</td>
+<td>#ffa500ff</td>
+<td><img src="images/orange-swatch.png" /></td>
+</tr>
+<tr>
+<td>purple</td>
+<td>#800080ff</td>
+<td><img src="images/purple-swatch.png" /></td>
+</tr>
+<tr>
+<td>red</td>
+<td>#ff0000ff</td>
+<td><img src="images/red-swatch.png" /></td>
+</tr>
+<tr>
+<td>silver</td>
+<td>#c0c0c0ff</td>
+<td><img src="images/silver-swatch.png" /></td>
+</tr>
+<tr>
+<td>teal</td>
+<td>#008080ff</td>
+<td><img src="images/teal-swatch.png" /></td>
+</tr>
+<tr>
+<td>white</td>
+<td>#ffffffff</td>
+<td><img src="images/white-swatch.png" /></td>
+</tr>
+<tr>
+<td>yellow</td>
+<td>#ffff00ff</td>
+<td><img src="images/yellow-swatch.png" /></td>
+</tr>
+</tbody></table>
+
+<p><em>Source: <a href="http://docs.unity3d.com/Manual/StyledText.html">http://docs.unity3d.com/Manual/StyledText.html</a></em></p>
+
+<h1 id="rust-functions">Rust Functions</h1>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">BroadcastChat</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">userid</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">SendChatMessage</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">userid</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">QuoteSafe</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">UserIDFromConnection</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">UserIDFromDeployedItem</span><span class="p">(</span><span class="n">deployeditem</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">UserIDFromPlayer</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">UserIDsFromBuildingPrivlidge</span><span class="p">(</span><span class="n">buildingpriv</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">RunServerCommand</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">ForcePlayerPosition</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">PrivateBindingFlag</span><span class="p">()</span>
+</code></pre>
+
+<p>There are a few functions that have been added to wrap Rust functions, creating aliases of sorts to make your life easier during initial coding as well as during upgrades.</p>
+
+<p>Placeholder text.</p>
+
+<h1 id="compiling-source">Compiling Source</h1>
+
+<p>While you don&rsquo;t need to compile your own Oxide builds, you can! We recommend using one of the <a href="http://forum.rustoxide.com/download/">official release builds</a> though.</p>
+
+<ol>
+<li>Clone the git repository locally.</li>
+<li>Open the solution in Visual Studio (2013 is recommended, but it should work on earlier versions).</li>
+<li>Compile the project. If you get errors, it probably means you&rsquo;re missing .NET framework.</li>
+</ol>
+
+<aside class="warning">Keep in mind that only official builds are supported by the Oxide team and community.</aside>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="csharp">csharp</a>
+                <a href="#" data-language-name="javascript">javascript</a>
+                <a href="#" data-language-name="lua">lua</a>
+                <a href="#" data-language-name="python">python</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
