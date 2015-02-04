@@ -461,9 +461,9 @@ We'll show you how to get started, along with sample code!
 
 <h2 id="creating-a-timer">Creating a timer</h2>
 
-<p>Sometimes you come across a situation which only a timer can fix. Timers are great for delaying code, allowing it to be run later.</p>
+<p>Sometimes you come across a situation which only a timer can fix. Timers are great for delaying code, allowing it to be run later. The following sections will show you the various timer types, and how to use them properly.</p>
 
-<h3 id="timer.once">timer.Once</h3>
+<h2 id="timer.once">timer.Once</h2>
 
 <blockquote>
 <p>Basic example of timer.Once</p>
@@ -499,7 +499,7 @@ We'll show you how to get started, along with sample code!
 
 <p>Executes the specified function once after the specified delay.</p>
 
-<h3 id="timer.repeat">timer.Repeat</h3>
+<h2 id="timer.repeat">timer.Repeat</h2>
 
 <blockquote>
 <p>Basic example of timer.Repeat</p>
@@ -517,7 +517,7 @@ We'll show you how to get started, along with sample code!
 
 <p>Executes the specified function every &ldquo;delay&rdquo; seconds. If &ldquo;repeats&rdquo; is specified, the function will only be called &ldquo;repeats&rdquo; times.</p>
 
-<h3 id="timer.nextframe">timer.NextFrame</h3>
+<h2 id="timer.nextframe">timer.NextFrame</h2>
 
 <blockquote>
 <p>Basic example of timer.NextFrame</p>
@@ -533,7 +533,7 @@ We'll show you how to get started, along with sample code!
 
 <p>Executes the specified function at the next frame.</p>
 
-<h3 id="timer.chain">timer.Chain</h3>
+<h2 id="timer.chain">timer.Chain</h2>
 
 <blockquote>
 <p>Basic example of timer.Chain</p>
@@ -586,6 +586,8 @@ We'll show you how to get started, along with sample code!
 <p>It&rsquo;s always a good habit to stop all timers when your plugin is unloaded; do this by destroying the instance of the timer.</p>
 
 <p>Timers can be used anywhere in your plugin, not just in the Unload function. Just make sure to always destroy them, as you wouldn&rsquo;t want a bunch of timers piling up and slowing down someone&rsquo;s server!</p>
+
+<p>Placeholder text</p>
 
 <h1 id="web-requests">Web Requests</h1>
 
@@ -810,12 +812,12 @@ We'll show you how to get started, along with sample code!
 
 <h1 id="compiling-source">Compiling Source</h1>
 
-<p>While you don&rsquo;t need to compile your own Oxide builds, you can! We recommend using one of the <a href="http://forum.rustoxide.com/download/">official release builds</a> though.</p>
+<p>While we recommend using one of the <a href="http://forum.rustoxide.com/download/">official release builds</a>, you can compile your own builds if you&rsquo;d like.</p>
 
 <ol>
-<li>Clone the git repository locally.</li>
+<li>Clone the git repository locally using <code class="prettyprint">git clone https://github.com/OxideMod/Oxide.git</code></li>
 <li>Open the solution in Visual Studio (2013 is recommended, but it should work on earlier versions).</li>
-<li>Compile the project. If you get errors, it probably means you&rsquo;re missing .NET framework.</li>
+<li>Build the project using the solution. If you get errors, it probably means you&rsquo;re missing .NET framework.</li>
 </ol>
 
 <aside class="warning">Keep in mind that only official builds are supported by the Oxide team and community.</aside>
