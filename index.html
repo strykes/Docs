@@ -79,13 +79,21 @@ We'll show you how to get started, along with sample code!
 <li>Oxide.Ext.Unity - <em>Provides support for Unity games</em></li>
 </ul>
 
-<p>As an example to what kind of extensions may be used in the future, here is a non-exhaustive list of possibilities:</p>
+<p>Third-party, unofficial extensions available:</p>
+
+<ul>
+<li><a href="http://forum.rustoxide.com/resources/768/">Oxide.Ext.RustWeb</a> - <em>A lightweight web server for the Rust Experimental server</em></li>
+<li><a href="http://forum.rustoxide.com/resources/768/">dcodeIO.RustWeb.dll</a> - <em>Provides generation of map images, and live map</em></li>
+</ul>
+
+<p>Examples of what extensions may be available in the future:</p>
 
 <ul>
 <li>Oxide.Ext.IRC - <em>Allows plugins to access an IRC server</em></li>
 <li>Oxide.Ext.MySQL - <em>Allows plugins to access a MySQL database</em></li>
 <li>Oxide.Ext.SQLite - <em>Allows plugins to access a SQLite database</em></li>
 <li>Oxide.Ext.WebServer - <em>Allows the game server to also host a web server</em></li>
+<li>Oxide.Ext.SevenDaysToDie - <em>Provides support for the 7 Days to Die server</em></li>
 </ul>
 
 <h1 id="api-hooks">API Hooks</h1>
@@ -390,7 +398,64 @@ We'll show you how to get started, along with sample code!
 
 <h1 id="configurations">Configurations</h1>
 
+<h2 id="creating-a-configuration">Creating a configuration</h2>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">PLUGIN</span><span class="p">.</span><span class="n">Title</span> <span class="o">=</span> <span class="s2">"Title of Plugin"</span>
+<span class="n">PLUGIN</span><span class="p">.</span><span class="n">Version</span> <span class="o">=</span> <span class="n">V</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">PLUGIN</span><span class="p">.</span><span class="n">Description</span> <span class="o">=</span> <span class="s2">"Plugin description"</span>
+<span class="n">PLUGIN</span><span class="p">.</span><span class="n">Author</span> <span class="o">=</span> <span class="s2">"Your Name"</span>
+<span class="n">PLUGIN</span><span class="p">.</span><span class="n">HasConfig</span> <span class="o">=</span> <span class="kc">true</span>
+
+<span class="k">function</span> <span class="nf">PLUGIN</span><span class="p">:</span><span class="n">Init</span><span class="p">()</span>
+    <span class="n">self</span><span class="p">:</span><span class="n">LoadDefaultConfig</span><span class="p">()</span>
+<span class="k">end</span>
+
+<span class="k">function</span> <span class="nf">PLUGIN</span><span class="p">:</span><span class="n">LoadDefaultConfig</span><span class="p">()</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">Config</span><span class="p">.</span><span class="n">ShowJoinMessage</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">Config</span><span class="p">.</span><span class="n">ShowLeaveMessage</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">Config</span><span class="p">.</span><span class="n">Messages</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">Config</span><span class="p">.</span><span class="n">Messages</span><span class="p">.</span><span class="n">Join</span> <span class="o">=</span> <span class="s2">"Welcome to this server"</span>
+    <span class="n">self</span><span class="p">.</span><span class="n">Config</span><span class="p">.</span><span class="n">Messages</span><span class="p">.</span><span class="n">Leave</span> <span class="o">=</span> <span class="s2">"Goodbye"</span>
+    <span class="n">self</span><span class="p">:</span><span class="n">SaveConfig</span><span class="p">()</span>
+<span class="k">end</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<h2 id="saving-a-configuration">Saving a configuration</h2>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
 <h1 id="data-tables">Data Tables</h1>
+
+<h2 id="creating-a-data-table">Creating a data table</h2>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<h2 id="saving-a-data-table">Saving a Data Table</h2>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
 
 <h1 id="timers">Timers</h1>
 
@@ -399,12 +464,34 @@ We'll show you how to get started, along with sample code!
 <p>Sometimes you come across a situation which only a timer can fix. Timers are great for delaying code, allowing it to be run later.</p>
 
 <h3 id="timer.once">timer.Once</h3>
+
+<blockquote>
+<p>Basic example of timer.Once</p>
+</blockquote>
 <pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
 </code></pre>
 <pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
 </code></pre>
-<pre><code class="highlight lua"><span class="n">self</span><span class="p">.</span><span class="n">broadcastTimer</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">Once</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span>
+<pre><code class="highlight lua"><span class="n">self</span><span class="p">.</span><span class="n">BroadcastTimer</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">Once</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span>
     <span class="n">rust</span><span class="p">.</span><span class="n">BroadcastChat</span><span class="p">(</span><span class="s2">"SERVER"</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<blockquote>
+<p>Example of timer.Once with a table</p>
+</blockquote>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">self</span><span class="p">.</span><span class="n">TimersList</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">self</span><span class="p">.</span><span class="n">TimersList</span><span class="p">[</span><span class="s2">"Notice1"</span><span class="p">]</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">Once</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span>
+    <span class="n">rust</span><span class="p">.</span><span class="n">BroadcastChat</span><span class="p">(</span><span class="s2">"SERVER"</span><span class="p">,</span> <span class="s2">"This is the Notice 1 every 3 seconds"</span><span class="p">)</span>
+<span class="k">end</span><span class="p">)</span>
+<span class="n">self</span><span class="p">.</span><span class="n">TimersList</span><span class="p">[</span><span class="s2">"Notice2"</span><span class="p">]</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">Once</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span>
+    <span class="n">rust</span><span class="p">.</span><span class="n">BroadcastChat</span><span class="p">(</span><span class="s2">"SERVER"</span><span class="p">,</span> <span class="s2">"This is the Notice 2 every 10 seconds"</span><span class="p">)</span>
 <span class="k">end</span><span class="p">)</span>
 </code></pre>
 <pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
@@ -413,11 +500,15 @@ We'll show you how to get started, along with sample code!
 <p>Executes the specified function once after the specified delay.</p>
 
 <h3 id="timer.repeat">timer.Repeat</h3>
+
+<blockquote>
+<p>Basic example of timer.Repeat</p>
+</blockquote>
 <pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
 </code></pre>
 <pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
 </code></pre>
-<pre><code class="highlight lua"><span class="n">self</span><span class="p">.</span><span class="n">broadcastTimer</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">Repeat</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span>
+<pre><code class="highlight lua"><span class="n">self</span><span class="p">.</span><span class="n">BroadcastTimer</span> <span class="o">=</span> <span class="n">timer</span><span class="p">.</span><span class="n">Repeat</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">function</span><span class="p">()</span>
     <span class="n">rust</span><span class="p">.</span><span class="n">BroadcastChat</span><span class="p">(</span><span class="s2">"SERVER"</span><span class="p">,</span> <span class="s2">"Hello world!"</span><span class="p">)</span>
 <span class="k">end</span><span class="p">)</span>
 </code></pre>
@@ -427,6 +518,10 @@ We'll show you how to get started, along with sample code!
 <p>Executes the specified function every &ldquo;delay&rdquo; seconds. If &ldquo;repeats&rdquo; is specified, the function will only be called &ldquo;repeats&rdquo; times.</p>
 
 <h3 id="timer.nextframe">timer.NextFrame</h3>
+
+<blockquote>
+<p>Basic example of timer.NextFrame</p>
+</blockquote>
 <pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
 </code></pre>
 <pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
@@ -439,6 +534,10 @@ We'll show you how to get started, along with sample code!
 <p>Executes the specified function at the next frame.</p>
 
 <h3 id="timer.chain">timer.Chain</h3>
+
+<blockquote>
+<p>Basic example of timer.Chain</p>
+</blockquote>
 <pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
 </code></pre>
 <pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
@@ -451,13 +550,33 @@ We'll show you how to get started, along with sample code!
 <p>Executes a chain of delayed functions. Each number in the argument list delays the timer chain by n more seconds, and each function in the argument list gets called after the previous delays in the chain have passed.</p>
 
 <h2 id="destroying-a-timer">Destroying a timer</h2>
+
+<blockquote>
+<p>Basic example in Unload</p>
+</blockquote>
 <pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
 </code></pre>
 <pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
 </code></pre>
 <pre><code class="highlight lua"><span class="k">function</span> <span class="nf">PLUGIN</span><span class="p">:</span><span class="n">Unload</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">broadcastTimer</span> <span class="k">then</span>
-        <span class="n">broadcastTimer</span><span class="p">:</span><span class="n">Destroy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">self</span><span class="p">.</span><span class="n">BroadcastTimer</span> <span class="k">then</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">BroadcastTimer</span><span class="p">:</span><span class="n">Destroy</span><span class="p">()</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+
+<blockquote>
+<p>Example in Unload with a table</p>
+</blockquote>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="k">function</span> <span class="nf">PLUGIN</span><span class="p">:</span><span class="n">Unload</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="k">in</span> <span class="nb">pairs</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">TimersList</span><span class="p">)</span> <span class="k">do</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">TimersList</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span><span class="n">Destroy</span><span class="p">()</span>
     <span class="k">end</span>
 <span class="k">end</span>
 </code></pre>
@@ -474,7 +593,23 @@ We'll show you how to get started, along with sample code!
 
 <h2 id="get-method">Get method</h2>
 
+<p>This uses the raw connection to a web page as you would on your browser.</p>
+
 <p>Returns true/false</p>
+<pre><code class="highlight csharp"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
+<pre><code class="highlight javascript"><span class="nx">We</span> <span class="nx">need</span> <span class="nx">an</span> <span class="nx">example</span> <span class="nx">here</span>
+</code></pre>
+<pre><code class="highlight lua"><span class="n">webrequests</span><span class="p">.</span><span class="n">EnqueueGet</span><span class="p">(</span><span class="s2">"http://www.google.com/search?q=rust+oxide"</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span> <span class="o">==</span> <span class="kc">nil</span> <span class="ow">or</span> <span class="n">code</span> <span class="o">~=</span> <span class="mi">200</span> <span class="k">then</span> 
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Couldn't get an answer from Google!"</span><span class="p">)</span> 
+        <span class="k">return</span> 
+    <span class="k">end</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Google answered: "</span> <span class="o">..</span> <span class="nb">tostring</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+<span class="k">end</span><span class="p">,</span> <span class="n">self</span><span class="p">.</span><span class="n">Object</span><span class="p">)</span>
+</code></pre>
+<pre><code class="highlight python"><span class="n">We</span> <span class="n">need</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</code></pre>
 
 <h2 id="post-method">Post method</h2>
 
@@ -645,6 +780,8 @@ We'll show you how to get started, along with sample code!
 
 <p><em>Source: <a href="http://docs.unity3d.com/Manual/StyledText.html">http://docs.unity3d.com/Manual/StyledText.html</a></em></p>
 
+<p>Placeholder text</p>
+
 <h1 id="rust-functions">Rust Functions</h1>
 <pre><code class="highlight lua"><span class="n">rust</span><span class="p">.</span><span class="n">BroadcastChat</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">userid</span><span class="p">)</span>
 </code></pre>
@@ -669,7 +806,7 @@ We'll show you how to get started, along with sample code!
 
 <p>There are a few functions that have been added to wrap Rust functions, creating aliases of sorts to make your life easier during initial coding as well as during upgrades.</p>
 
-<p>Placeholder text.</p>
+<p>Placeholder text</p>
 
 <h1 id="compiling-source">Compiling Source</h1>
 
