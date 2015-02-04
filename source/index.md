@@ -673,6 +673,287 @@ There are a few functions that have been added to wrap Rust functions, creating 
 
 Placeholder text
 
+# Snipets
+
+## General
+
+### Hello World
+
+``` c#
+// Reference: Oxide.Ext.Rust
+
+using System.Collections.Generic;
+using System.Reflection;
+using System;
+using System.Data;
+using UnityEngine;
+using Oxide.Core;
+
+namespace Oxide.Plugins
+{
+    [Info("HelloWorld", "Reneb", 1.0)]
+    class HelloWorld : RustPlugin
+    {
+        void Loaded()
+        {
+            Puts("Hello World");
+        }
+    }
+}
+```
+
+``` javascript
+We need an example here
+```
+
+``` lua
+PLUGIN.Name = "Hello World"
+PLUGIN.Title = "Hello World"
+PLUGIN.Version = V(1, 0, 0)
+PLUGIN.Description = "Hello World"
+PLUGIN.Author = "Reneb"
+PLUGIN.HasConfig = false
+
+function PLUGIN:Init()
+    print("Hello World")
+end
+
+```
+
+``` python
+We need an example here
+```
+
+## Private fields
+
+### Get a private field
+
+To get a private field you will need:<br>
+- Type<br>
+- Fieldname<br>
+- BindingFlags that point to get NonPublic<br>
+
+``` c#
+// Reference: Oxide.Ext.Rust
+
+using System.Collections.Generic;
+using System.Reflection;
+using System;
+using System.Data;
+using UnityEngine;
+using Oxide.Core;
+
+namespace Oxide.Plugins
+{
+    [Info("BuildingPrivileges", "Reneb", 1.0)]
+    class BuildingPrivileges : RustPlugin
+    {
+        private FieldInfo localbuildingPrivileges;
+        void Loaded()
+        {
+            localbuildingPrivileges = typeof(BasePlayer).GetField("buildingPrivlidges", (BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic));
+        }
+        [ChatCommand("bdp")]
+        void cmdChatBuildingPrivileges(BasePlayer player, string command, string[] args)
+        {
+            if (player.net.connection.authLevel < 1)
+            {
+                SendReply(player, "You are not allowed to use this command");
+                return;
+            }
+            var bldprivs = localbuildingPrivileges.GetValue(player) as List<BuildingPrivlidge>;
+            foreach(BuildingPrivlidge bldpriv in bldprivs)
+            {
+            	SendReply(player, "Found a Tool Cupboard, getting names of allowed users");
+                var locAllowed = bldpriv.authorizedPlayers;
+            	foreach( ProtoBuf.PlayerNameID ply in locAllowed )
+            	{
+            		SendReply(player, ply.username);
+            	}
+            }
+        }
+    }
+}
+```
+
+``` javascript
+We need an example here
+```
+
+``` lua
+
+PLUGIN.Name = "List of Current Buildings Privileges"
+PLUGIN.Title = "List of Current Buildings Privileges"
+PLUGIN.Version = V(1, 0, 0)
+PLUGIN.Description = "List of Current Buildings Privileges"
+PLUGIN.Author = "Reneb"
+PLUGIN.HasConfig = false
+
+function PLUGIN:Init()
+    command.AddChatCommand( "bdp", self.Object, "cmdBuildingPrivileges" )
+end
+
+function PLUGIN:cmdTest(player,cmd,args)
+	-- So first you need to get the field out of BasePlayer type named buildingPrivlidges
+	-- var = type:GetField("fieldname"),privatefield
+	-- var is the variable that it will be saved in
+	-- type is the type of the class
+	-- fieldname is the private field name you want
+	-- privatefield is rust.PrivateBindingFlag()
+	localbuildingPrivileges = global.BasePlayer._type:GetField("buildingPrivlidges", rust.PrivateBindingFlag() ) 
+
+	-- Now we get the value off the player
+	bldpriv = localbuildingPrivileges:GetValue(player)
+
+	-- as buildingPrivlidges is a list you have to read it value by value
+	for i=0, bldpriv.Count-1 do
+		rust.SendChatMessage(player,"Found a Tool Cupboard, getting names of allowed users")
+		locAllowed = bldpriv[i].authorizedPlayers
+		for u=0, locAllowed.Count-1 do
+			rust.SendChatMessage(player,locAllowed[u].username)
+		end
+	end 
+end
+
+```
+
+``` python
+We need an example here
+```
+
+### Set a private field
+
+To set a private field you will need:<br>
+- Type<br>
+- Fieldname<br>
+- BindingFlags that point to get NonPublic<br>
+<br>
+Notice that from lua you will only be able to set fields that have a value as: string, float or boolean, and of course others that have Vector3, Quaternion, that can be created from Lua.<br>
+All others are only accessible via C#
+
+``` c#
+// Reference: Oxide.Ext.Rust
+
+using System.Collections.Generic;
+using System.Reflection;
+using System;
+using System.Data;
+using UnityEngine;
+using Oxide.Core;
+
+namespace Oxide.Plugins
+{
+    [Info("AirdropSpecifics", "Reneb", 1.0)]
+    class AirdropSpecifics : RustPlugin
+    {
+        private FieldInfo CPstartPos;
+        private FieldInfo CPendPos;
+        private FieldInfo CPdropped;
+        private FieldInfo CPsecondsToTake;
+        private FieldInfo CPsecondsTaken;
+        private MethodInfo CreateEntity;
+        private Vector3 startPos;
+        private Vector3 endPos;
+        private float secondsToTake;
+        private BaseEntity cargoplane;
+
+        void Loaded()
+        {
+            startPos = new UnityEngine.Vector3(1000f,200f,1000f);
+            endPos = new UnityEngine.Vector3(500f,200f,1000f);
+            secondsToTake = 5f;
+
+            CPstartPos = typeof(CargoPlane).GetField("startPos", (BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic));
+            CPendPos = typeof(CargoPlane).GetField("endPos", (BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic));
+            CPdropped = typeof(CargoPlane).GetField("dropped", (BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic));
+            CPsecondsToTake = typeof(CargoPlane).GetField("secondsToTake", (BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic));
+            CPsecondsTaken = typeof(CargoPlane).GetField("secondsTaken", (BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.NonPublic));
+        }
+        [ConsoleCommand("airdrop.start")]
+        void cmdAirdropStart(ConsoleSystem.Arg arg)
+        {
+            if (arg.connection != null)
+            {
+                if (arg.connection.authLevel < 1)
+                {
+                    SendReply(arg, "You are not allowed to use this command");
+                    return;
+                }
+            } 
+            if(cargoplane != null) 
+            {
+                cargoplane.KillMessage();
+            }
+            cargoplane =  GameManager.server.CreateEntity( "events/cargo_plane",  new UnityEngine.Vector3() , new UnityEngine.Quaternion() );
+            if (cargoplane != null) 
+            {
+                cargoplane.Spawn(true);
+                CPstartPos.SetValue(cargoplane,startPos);
+                CPendPos.SetValue(cargoplane,endPos);
+                CPsecondsToTake.SetValue(cargoplane, secondsToTake);
+            }
+        }
+    }
+}
+```
+
+``` javascript
+We need an example here
+```
+
+``` lua
+PLUGIN.Title = "Airdrop-Specifics"
+PLUGIN.Version = V(1, 0, 0)
+PLUGIN.Description = "Set airdrop specifics, from where & to. You can't set the secondsToTake as it's in Int32, no editable via Lua"
+PLUGIN.Author = "Reneb"
+PLUGIN.HasConfig = false
+
+function PLUGIN:Init()
+    command.AddConsoleCommand("airdrop.start", self.Object, "ccmdAirDrop")
+    CreateEntity = global.GameManager._type:GetMethod("CreateEntity")
+end
+function PLUGIN:OnServerInitialized()
+	-- Here you will get ALL the fields that you want to set
+    CPstartPos = global.CargoPlane._type:GetField("startPos", rust.PrivateBindingFlag() )
+    CPendPos = global.CargoPlane._type:GetField("endPos", rust.PrivateBindingFlag() )
+    CPdropped = global.CargoPlane._type:GetField("dropped", rust.PrivateBindingFlag() )
+    
+    -- secondsToTake and secondsTaken are just an exemple and can only be read, not set
+    CPsecondsToTake = global.CargoPlane._type:GetField("secondsToTake", rust.PrivateBindingFlag() )
+    CPsecondsTaken = global.CargoPlane._type:GetField("secondsTaken", rust.PrivateBindingFlag() )
+    
+    -- Here i'm making a static start position and static end position as this is only an exemple, not going to create a full plugin :p
+    startPos = new( UnityEngine.Vector3._type, nil )
+    endPos = new( UnityEngine.Vector3._type, nil )
+    startPos.x = 1000
+    startPos.y = 200
+    startPos.z = 1000
+    endPos.x = 500
+    endPos.y = 200
+    endPos.z = 500
+end
+
+function PLUGIN:ccmdAirDrop( arg )
+    if(cargoplane) then
+        cargoplane:KillMessage()
+    end
+    cargoplane =  CreateEntity:Invoke( global.GameManager.server, util.TableToArray( { "events/cargo_plane",  new( UnityEngine.Vector3._type, nil ) , new( UnityEngine.Quaternion._type, nil ) } ) )
+    if (cargoplane ~= nil) then
+        cargoplane:Spawn(true)
+        -- As you want to EDIT the startPos and endPos, you will have to wait for Rust to create his own, and THEN edit it.
+        -- So just place the SetValues after.
+        
+        CPstartPos:SetValue(cargoplane,startPos)
+        CPendPos:SetValue(cargoplane,endPos)
+        -- And voila!
+    end
+end
+```
+
+``` python
+We need an example here
+```
+
 # Compiling Source
 
 While we recommend using one of the [official release builds](http://forum.rustoxide.com/download/), you can compile your own builds if you'd like.
