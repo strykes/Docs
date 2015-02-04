@@ -46,18 +46,12 @@ The current official extensions are listed below:
  * Oxide.Ext.Rust - _Provides support for the Rust Experimental server_
  * Oxide.Ext.Unity - _Provides support for Unity games_
 
-Third-party, unofficial extensions available:
-
- * [Oxide.Ext.RustWeb](http://forum.rustoxide.com/resources/768/) - _A lightweight web server for the Rust Experimental server_
- * [dcodeIO.RustWeb.dll](http://forum.rustoxide.com/resources/768/) - _Provides generation of map images, and live map_
-
-Examples of what extensions may be available in the future:
+As an example to what kind of extensions may be used in the future, here is a non-exhaustive list of possibilities:
 
  * Oxide.Ext.IRC - _Allows plugins to access an IRC server_
  * Oxide.Ext.MySQL - _Allows plugins to access a MySQL database_
  * Oxide.Ext.SQLite - _Allows plugins to access a SQLite database_
  * Oxide.Ext.WebServer - _Allows the game server to also host a web server_
- * Oxide.Ext.SevenDaysToDie - _Provides support for the 7 Days to Die server_
 
 # API Hooks
 
@@ -253,7 +247,7 @@ Examples of what extensions may be available in the future:
 
 # Configurations
 
-## Creating a configuration
+## Loading / Creating a Configuration Table
 
 ``` csharp
 We need an example here
@@ -264,23 +258,19 @@ We need an example here
 ```
 
 ``` lua
-PLUGIN.Title = "Title of Plugin"
+PLUGIN.Name = "Name Of Plugin"
+PLUGIN.Title = "Title Of Plugin"
 PLUGIN.Version = V(0, 0, 1)
 PLUGIN.Description = "Plugin description"
-PLUGIN.Author = "Your Name"
+PLUGIN.Author = "Author"
 PLUGIN.HasConfig = true
 
-function PLUGIN:Init()
-    self:LoadDefaultConfig()
-end
-
 function PLUGIN:LoadDefaultConfig()
-    self.Config.ShowJoinMessage = true
-    self.Config.ShowLeaveMessage = true
-    self.Config.Messages = {}
-    self.Config.Messages.Join = "Welcome to this server"
-    self.Config.Messages.Leave = "Goodbye"
-    self:SaveConfig()
+	self.Config.Messages = {}
+	self.Config.Messages.Join = "Welcome to this server"
+	self.Config.Messages.Leave = "Goodbye"
+	self.Config.ShowJoinMessage = true
+	self.Config.ShowLeaveMessage = true
 end
 ```
 
@@ -288,7 +278,7 @@ end
 We need an example here
 ```
 
-## Saving a configuration
+## Saving a Configuration Table
 
 ``` csharp
 We need an example here
@@ -299,7 +289,7 @@ We need an example here
 ```
 
 ``` lua
-We need an example here
+self:SaveConfig()
 ```
 
 ``` python
@@ -308,7 +298,7 @@ We need an example here
 
 # Data Tables
 
-## Creating a data table
+## Loading / Creating a Data Table
 
 ``` csharp
 We need an example here
@@ -348,11 +338,9 @@ We need an example here
 
 ## Creating a timer
 
-Sometimes you come across a situation which only a timer can fix. Timers are great for delaying code, allowing it to be run later. The following sections will show you the various timer types, and how to use them properly.
+Sometimes you come across a situation which only a timer can fix. Timers are great for delaying code, allowing it to be run later.
 
-## timer.Once
-
-> Basic example of timer.Once
+### timer.Once
 
 ``` csharp
 We need an example here
@@ -363,26 +351,10 @@ We need an example here
 ```
 
 ``` lua
-self.BroadcastTimer = timer.Once(3, function()
+self.broadcastTimer = timer.Once(3, function()
     rust.BroadcastChat("SERVER", "Hello world!")
 end)
-```
 
-``` python
-We need an example here
-```
-
-> Example of timer.Once with a table
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
 self.TimersList = {}
 self.TimersList["Notice1"] = timer.Once(3, function()
     rust.BroadcastChat("SERVER", "This is the Notice 1 every 3 seconds")
@@ -398,9 +370,7 @@ We need an example here
 
 Executes the specified function once after the specified delay.
 
-## timer.Repeat
-
-> Basic example of timer.Repeat
+### timer.Repeat
 
 ``` csharp
 We need an example here
@@ -411,7 +381,7 @@ We need an example here
 ```
 
 ``` lua
-self.BroadcastTimer = timer.Repeat(10, 0, function()
+self.broadcastTimer = timer.Repeat(10, 0, function()
     rust.BroadcastChat("SERVER", "Hello world!")
 end)
 ```
@@ -422,9 +392,7 @@ We need an example here
 
 Executes the specified function every "delay" seconds. If "repeats" is specified, the function will only be called "repeats" times.
 
-## timer.NextFrame
-
-> Basic example of timer.NextFrame
+### timer.NextFrame
 
 ``` csharp
 We need an example here
@@ -444,9 +412,7 @@ We need an example here
 
 Executes the specified function at the next frame.
 
-## timer.Chain
-
-> Basic example of timer.Chain
+### timer.Chain
 
 ``` csharp
 We need an example here
@@ -468,8 +434,6 @@ Executes a chain of delayed functions. Each number in the argument list delays t
 
 ## Destroying a timer
 
-> Basic example in Unload
-
 ``` c#
 We need an example here
 ```
@@ -480,30 +444,14 @@ We need an example here
 
 ``` lua
 function PLUGIN:Unload()
-    if self.BroadcastTimer then
-        self.BroadcastTimer:Destroy()
+    if broadcastTimer then
+        broadcastTimer:Destroy()
     end
 end
-```
 
-``` python
-We need an example here
-```
-
-> Example in Unload with a table
-
-``` c#
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
 function PLUGIN:Unload()
-    for key, value in pairs(self.TimersList) do
-        self.TimersList[key]:Destroy()
+    for k,v in pairs(self.TimersList) do
+      self.TimersList[k]:Destroy()
     end
 end
 ```
@@ -516,15 +464,13 @@ It's always a good habit to stop all timers when your plugin is unloaded; do thi
 
 Timers can be used anywhere in your plugin, not just in the Unload function. Just make sure to always destroy them, as you wouldn't want a bunch of timers piling up and slowing down someone's server!
 
-Placeholder text
-
 # Web Requests
 
 Sends a HTTP web request to the specified URL. Returns true if the web request was sent, false if not. The callback is called with 2 parameters - an integer HTTP response code and a string response.
 
 ## Get method
 
-This uses the raw connection to a web page as you would on your browser.
+This uses the raw connection to a webpage as you would on your browser
 
 Returns true/false
 
@@ -537,13 +483,14 @@ We need an example here
 ```
 
 ``` lua
-webrequests.EnqueueGet("http://www.google.com/search?q=rust+oxide", function(code, response)
-    if response == nil or code ~= 200 then 
-        print("Couldn't get an answer from Google!") 
-        return 
-    end
-    print("Google answered: " .. tostring(response))
-end, self.Object)
+local r = webrequests.EnqueueGet("http://www.google.com/search?q=rustoxide", function(code, response)
+  if(response == nil) then 
+    print("Couldn't get an answer from Google") 
+    return 
+  end
+  print("Google Answered:")
+  print(tostring(response))
+end)
 ```
 
 ``` python
@@ -625,247 +572,164 @@ Another option is to use the name of the color. This is easier to understand but
 
 _Source: [http://docs.unity3d.com/Manual/StyledText.html](http://docs.unity3d.com/Manual/StyledText.html)_
 
-Placeholder text
-
 # Rust Functions
+
+## BroadcastChat
+rust.BroadcastChat(name, message, userid)<br>
+Broadcast a message ingame<br>
+userid is used for the avatar, 0 is the server console, see further to know how to get players userID
+
+``` lua
+function PLUGIN:OnPlayerInit(player)
+	rust.BroadcastChat("SERVER", "Welcome to " .. player.diplayName, "0")
+end
+```
+
+``` c#
+void OnPlayerInit(BasePlayer player)
+{
+	var message = string.Format("<color=orange>{0}</color>  has joined the server", player.displayName);
+	ConsoleSystem.Broadcast("chat.add", { player.userID, message, 1f });
+}
+```
+
+
+## SendChatMessage
+rust.SendChatMessage(player, name, message, userid)<br>
+Send a message to a player<br>
+userid is used for the avatar, 0 is the server console, see further to know how to get players userID
+
+``` lua
+function PLUGIN:OnPlayerSpawn(player)
+	rust.SendChatMessage(player, "SERVER", "You've respawned from a terrible death", "0")
+end
+```
+
+``` c#
+void OnPlayerSpawn(BasePlayer player)
+{
+	var message =  "You've respawned from a terrible death";
+	player.SendConsoleCommand("chat.add", { 0, message });
+}
+```
+
+## QuoteSafe
+rust.QuoteSafe(message)<br>
+Add quotes to safely save or send a text
+
+``` lua
+rust.QuoteSafe(message)
+```
+
+``` c#
+message.QuoteSafe();
+```
+
+## UserIDFromConnection
+rust.UserIDFromConnection(connection)<br>
+Get the UserID of a player from his connection
+
+``` lua
+function PLUGIN:CanClientLogin(connection)
+	local playerid = rust.UserIDFromConnection(connection)
+	if(playerid == "76561197961481118") then
+		return "We don't want you on this server Reneb!!!"
+	end
+	-- please don't use this on your server <3
+end
+```
+
+``` c#
+object CanClientLogin(Network.Connection connection)
+{
+	var playerid = connection.userid.ToString();
+	if(playerid == "76561197961481118")
+	{
+		return "We don't want you on this server Reneb!!!";
+	}
+	// please don't use this on your server <3
+	return null;
+	
+}
+```
+
+## UserIDFromDeployedItem
+rust.UserIDFromDeployedItem(deployeditem)<br>
+Get the OwnerID of a deployable
+
+``` lua
+rust.UserIDFromDeployedItem(deployeditem)
+```
+
+``` c#
+we need an example here
+```
+
+## UserIDFromPlayer
+rust.UserIDFromPlayer(player)<br>
+Get the UserID of a baseplayer
+
+``` lua
+function PLUGIN:Init()
+	command.AddChatCommand( "steamid",  self.Object, "cmdSteamid" )
+end
+function PLUGIN:cmdSteamid(player,cmd,arg)
+	rust.SendChatMessage(player,"SERVER","Your SteamID is: " .. rust.UserIDFromPlayer(player), "0")
+end
+```
+
+``` c#
+[ChatCommand("steamid")]
+void cmdChatSteamid(BasePlayer player, string command, string[] args)
+{
+	SendReply(player, "Your SteamID is: " + player.userID.ToString());
+}
+```
+
+## UserIDsFromBuildingPrivlidge
+rust.UserIDsFromBuildingPrivlidge(buildingpriv)<br>
+Get the UserID of players that have access to a Tool Cupboard<br>
+You will see an exemple of this use in the Snippets
+
+## RunServerCommand
+rust.RunServerCommand(command, args)<br>
+Run a server command
+
+``` lua
+rust.RunServerCommand("server.hostname", "New Server Name")
+```
+
+## ForcePlayerPosition
+rust.ForcePlayerPosition(player, x, y, z)<br>
+Teleport a player to a position
+
+``` lua
+rust.ForcePlayerPosition(player, x, y, z)
+```
+
+``` c#
+void ForcePlayerPosition(BasePlayer player, string x, string y, string z)
+{
+	Vector3 destination = new UnityEngine.Vector3();
+	destination.x = x;
+	destination.y = y;
+	destination.z = z;
+	player.transform.position = destination;
+	player.ClientRPC(null, player, "ForcePositionTo", new object[] { destination });
+	player.TransformChanged();
+}
+```
+
+## PrivateBindingFlag
+rust.PrivateBindingFlag()<br>
+Usefull to get/set private methods / fields and properties<br>
+You will see an exemple of use of this in the Snippets
 
 There are a few functions that have been added to wrap Rust functions, creating aliases of sorts to make your life easier during initial coding as well as during upgrades.
 
-Placeholder text
+Placeholder text.
 
-## BroadcastChat
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-## SendChatMessage
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-## QuoteSafe
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-## UserIDFromConnection
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-Placeholder text
-
-## UserIDFromDeployedItem
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-Placeholder text
-
-## UserIDFromPlayer
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-Placeholder text
-
-## UserIDsFromBuildingPrivlidge
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-Placeholder text
-
-## RunServerCommand
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-Placeholder text
-
-## ForcePlayerPosition
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-Placeholder text
-
-## PrivateBindingFlag
-
-``` csharp
-We need an example here
-```
-
-``` javascript
-We need an example here
-```
-
-``` lua
-We need an example here
-```
-
-``` python
-We need an example here
-```
-
-Placeholder text
-
-Placeholder text
-
-# Snipets
+# Snippets
 
 ## General
 
@@ -908,6 +772,68 @@ PLUGIN.HasConfig = false
 
 function PLUGIN:Init()
     print("Hello World")
+end
+
+```
+
+``` python
+We need an example here
+```
+
+### Chat Command
+
+``` c#
+// Reference: Oxide.Ext.Rust
+
+using System;
+using System.Data;
+using UnityEngine;
+using Oxide.Core;
+
+namespace Oxide.Plugins
+{
+    [Info("HelloYou", "Reneb", 1.0)]
+    class HelloYou : RustPlugin
+    {
+        void Loaded()
+        {
+        }
+        [ChatCommand("helloyou")]
+        void cmdChatHello(BasePlayer player, string command, string[] args)
+        {
+            if (player.net.connection.authLevel < 1)
+            {
+                SendReply(player, "You are not allowed to use this command");
+                return;
+            }
+            SendReply(player, "Hello to you too");
+        }
+    }
+}
+```
+
+``` javascript
+We need an example here
+```
+
+``` lua
+PLUGIN.Name = "Hello You"
+PLUGIN.Title = "Hello You"
+PLUGIN.Version = V(1, 0, 0)
+PLUGIN.Description = "Hello You"
+PLUGIN.Author = "Reneb"
+PLUGIN.HasConfig = false
+
+function PLUGIN:Init()
+    command.AddChatCommand( "helloyou",  self.Object, "cmdHelloyou" )
+end
+
+function PLUGIN:cmdHelloyou(player,cmd,args)
+	if(player:GetComponent("BaseNetworkable").net.connection.authLevel < 1) then
+		rust.SendChatMessage(player, "You are not allowed to use this command")
+		return
+	end
+	rust.SendChatMessage(player, "Hello to you too")
 end
 
 ```
@@ -1148,10 +1074,10 @@ We need an example here
 
 # Compiling Source
 
-While we recommend using one of the [official release builds](http://forum.rustoxide.com/download/), you can compile your own builds if you'd like.
+While you don't need to compile your own Oxide builds, you can! We recommend using one of the [official release builds](http://forum.rustoxide.com/download/) though.
 
- 1. Clone the git repository locally using `git clone https://github.com/OxideMod/Oxide.git`
- 2. Open the solution in Visual Studio (2013 is recommended, but it should work with other versions).
- 3. Build the project using the solution. If you get errors, it probably means you're missing .NET framework.
+ 1. Clone the git repository locally.
+ 2. Open the solution in Visual Studio (2013 is recommended, but it should work on earlier versions).
+ 3. Compile the project. If you get errors, it probably means you're missing .NET framework.
 
 <aside class="warning">Keep in mind that only official builds are supported by the Oxide team and community.</aside>
